@@ -16,14 +16,16 @@
 
 <script>
 export default {
-	data() {
-		return {
-			isAlive: false
-		}
-	},
+  props: ['initialIsAlive'],
+  data() {
+    return {
+      isAlive: this.initialIsAlive
+    };
+  },
   methods:{
-    toggleAlive(){
-      this.isAlive = !this.isAlive
+    toggleAlive() {
+      this.isAlive = !this.isAlive;
+      this.$emit('update:isAlive', this.isAlive); // Émettre un événement avec la nouvelle valeur de isAlive
     }
   }
 }
