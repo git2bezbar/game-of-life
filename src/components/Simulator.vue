@@ -17,6 +17,9 @@ import SimulatorCell from './SimulatorCell.vue'
     </div>
   </div>
   <button @click="nextGeneration">Génération Suivante</button>
+  <button @click="startSimulation">Play</button>
+  <button @click="stopSimulation">Stop</button>
+  <button @click="resetSimulation">Reset</button>
 </template>
 
 <script>
@@ -29,7 +32,8 @@ export default {
       x: 10,
       y: 10,
       grid: [],
-      nextGrid: []
+      nextGrid: [],
+      intervalId: null
     }
   },
   computed: {
@@ -44,18 +48,35 @@ export default {
         for (let j = 0; j < this.grid[i].length; j++) {
           let cellsAroundAlive = 0
           //console.log(this.grid[i][j])
+          cellsAroundAlive = this.countCellsAroundAlive(i, j, cellsAroundAlive)
           if (this.grid[i][j] === false) {
-            this.nextGrid[i][j] = this.willBeBorn(i, j, cellsAroundAlive)
+            this.nextGrid[i][j] = this.willBeBorn(cellsAroundAlive)
+          } else {
+            this.nextGrid[i][j] = this.willBeDie(cellsAroundAlive)
           }
         }
       }
-      console.log('Grid normal : ')
-      console.table(this.grid)
-      console.log('Prochaine grid : ')
-      console.table(this.nextGrid)
       this.grid = JSON.parse(JSON.stringify(this.nextGrid))
     },
-    willBeBorn(col, row, cellsAroundAlive) {
+    resetSimulation() {
+      for (let i = 0; i < this.x; i++) {
+        for (let j = 0; j < this.y; j++) {
+          this.grid[i][j] = false
+        }
+      }
+    },
+    startSimulation() {
+      if (this.intervalId === null) {
+        this.intervalId = setInterval(this.nextGeneration, 200) // Changez 1000 pour ajuster le délai en millisecondes
+      }
+    },
+    stopSimulation() {
+      if (this.intervalId !== null) {
+        clearInterval(this.intervalId)
+        this.intervalId = null
+      }
+    },
+    countCellsAroundAlive(col, row, cellsAroundAlive) {
       if (col > 0 && row > 0) {
         if (this.grid[col - 1][row - 1] === true) {
           cellsAroundAlive++
@@ -98,7 +119,16 @@ export default {
           cellsAroundAlive++
         }
       }
-
+      return cellsAroundAlive
+    },
+    willBeDie(cellsAroundAlive) {
+      if (cellsAroundAlive < 2 || cellsAroundAlive > 3) {
+        return false
+      } else {
+        return true
+      }
+    },
+    willBeBorn(cellsAroundAlive) {
       // Test si nombre de celulle est suffisant
       if (cellsAroundAlive === 3) {
         return true
@@ -132,6 +162,10 @@ export default {
         this.grid[i][j] = false
       }
     }
+  },
+  beforeDestroy() {
+    // Assurez-vous d'arrêter l'intervalle lorsque le composant est détruit
+    this.stopSimulation()
   }
 }
 </script>
