@@ -1,23 +1,23 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import InputWithLabelComponent from './components/InputWithLabel/InputWithLabelComponent.vue'
+import Chip from './components/Chip/ChipComponent.vue'
+import AddingButtonComponent from './components/AddingButton/AddingButtonComponent.vue'
+
+export default {
+  components: {
+    InputWithLabelComponent,
+    Chip,
+    AddingButtonComponent
+  }
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div class="h-screen w-screen bg-dark-purple flex flex-col items-center justify-center p-96 gap-16 text-white">
+    <InputWithLabelComponent :label="'My label'" :placeholder="'malafak'" />
+    <Chip>Zifukoro</Chip>
+    <AddingButtonComponent class="w-[350px] h-[150px]"/>
+  </div>
 </template>
 
 <style>
