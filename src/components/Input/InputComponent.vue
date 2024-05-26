@@ -1,6 +1,6 @@
 <template>
   <input
-    class="p-4 bg-purple/10 border border-purple/40 rounded-2xl outline-none focus:border-purple/80 duration-300 text-white placeholder:text-white/40"
+    class="p-4 bg-purple/10 border border-purple/40 rounded-2xl outline-none focus:border-purple/80 duration-300 placeholder:text-white:/40"
     type="text"
     :value="inputValue"
     @input="inputHandler"
