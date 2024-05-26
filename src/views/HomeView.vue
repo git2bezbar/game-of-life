@@ -6,7 +6,7 @@
 
 <template>
   <HeaderComponent />
-  <main class="flex flex-col items-center justify center px-[512px] py-32 gap-32">
+  <main class="flex flex-col items-center justify-center px-[512px] py-32 gap-32">
     <div class="flex flex-col items-center gap-8 text-center">
       <img class="rounded-2xl" src="/home.png" alt="Accueil">
       <h1 class="text-7xl">Découvrez le jeu de la vie de Conway</h1>
