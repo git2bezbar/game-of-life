@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="bg-dark-purple px-16 py-8 flex justify-between">
+    <div class="bg-dark-purple px-16 py-8 flex justify-between items-center">
       <router-link to="/">
         <img alt="Game of Life logo" class="logo" src="@/assets/game-of-life-logo.svg" width="265" height="50" />
       </router-link>
@@ -27,7 +27,3 @@
     },
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
