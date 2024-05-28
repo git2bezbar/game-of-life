@@ -2,12 +2,13 @@
   * Provides all the existing configs.
   * @example
   * ```js
-  * getAllConfigs();
+  * getAllConfigs(typeId);
   * ```
+  * @param {string | Number} typeId - The id of the type if you want to filter. 
   */
 
-export async function getAllConfigs() {
-  const reponse = await fetch(`http://localhost:3000/api/configs`);
+export async function getAllConfigs(typeId = -1) {
+  const reponse = await fetch(`http://localhost:3000/api/configs${typeId !== -1 ? `?typeId=${typeId}` : ''}`);
   const configs = await reponse.json();
 
   return configs;
