@@ -9,6 +9,7 @@
     <div class="grid grid-cols-2 gap-4">
       <ConfigCardComponent
       v-if="this.isFetching"
+      to="/wiki/"
       title="Chargment..."
       description="Chargement des types de configurations..."
     />
@@ -16,7 +17,7 @@
         v-else
         v-for="type in this.types"
         :key="type.id"
-        :id="type.id"
+        :to="`/wiki/${type.id}`"
         :title="type.name"
         :description="type.description"
       />
@@ -29,7 +30,7 @@
   import HeaderComponent from '../components/Header/HeaderComponent.vue'
   import FooterComponent from '../components/Footer/FooterComponent.vue'
   import ConfigCardComponent from '@/components/ConfigCard/ConfigCardComponent.vue';
-import { getAllTypes } from '@/services/api/types';
+  import { getAllTypes } from '@/services/api/types';
 
   export default {
     name: 'WikiView',
