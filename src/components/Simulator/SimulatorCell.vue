@@ -4,7 +4,7 @@
 
 <style scoped>
 .cell {
-  height: 50px;
+  height: 25px;
   border: 1px solid black;
 }
 .alive {

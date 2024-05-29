@@ -2,7 +2,8 @@
 import SimulatorCell from './SimulatorCell.vue'
 </script>
 <template>
-  <div class="grid" :style="{ 'grid-template-columns': 'repeat(' + x + ', 50px)' }">
+  <div class="grid" 
+    :style="gridStyle">
     <div v-for="(row, rowIndex) in grid" :key="rowIndex">
       <SimulatorCell
         v-bind:row="row"
@@ -17,9 +18,9 @@ import SimulatorCell from './SimulatorCell.vue'
     </div>
   </div>
   <button @click="nextGeneration">Génération Suivante</button>
-  <button @click="startSimulation">Play</button>
-  <button @click="stopSimulation">Stop</button>
+  <button @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
   <button @click="resetSimulation">Reset</button>
+  <p>{{  nbGeneration }}</p>
 </template>
 
 <script>
@@ -33,15 +34,31 @@ export default {
       y: 10,
       grid: [],
       nextGrid: [],
-      intervalId: null
+      intervalId: null,
+      isRunning : false,
+      nbGeneration: 0
     }
   },
   computed: {
     count() {
       return this.x * this.y
+    },
+    gridStyle() {
+      return {
+        'grid-template-columns': `repeat(${this.x}, 25px)`
+      };
     }
   },
   methods: {
+    toggleSimulation(){
+      if(this.isRunning){
+        this.stopSimulation();
+      }
+      else{
+        this.startSimulation();
+      }
+      this.isRunning = !this.isRunning
+    },
     nextGeneration() {
       this.nextGrid = JSON.parse(JSON.stringify(this.grid))
       for (let i = 0; i < this.grid.length; i++) {
@@ -56,14 +73,19 @@ export default {
           }
         }
       }
+      this.nbGeneration++
       this.grid = JSON.parse(JSON.stringify(this.nextGrid))
     },
     resetSimulation() {
+      if(this.isRunning){
+        this.toggleSimulation()
+      }
       for (let i = 0; i < this.x; i++) {
         for (let j = 0; j < this.y; j++) {
           this.grid[i][j] = false
         }
       }
+      this.nbGeneration = 0
     },
     startSimulation() {
       if (this.intervalId === null) {
@@ -77,48 +99,22 @@ export default {
       }
     },
     countCellsAroundAlive(col, row, cellsAroundAlive) {
-      if (col > 0 && row > 0) {
-        if (this.grid[col - 1][row - 1] === true) {
-          cellsAroundAlive++
+      const directions = [
+        [-1, -1], [0, -1], [1, -1],
+        [-1, 0 ],          [1, 0 ],
+        [-1, 1 ], [0, 1 ], [1, 1 ]
+      ];
+        directions.forEach(([dCol, dRow]) => {
+        const newCol = col + dCol;
+        const newRow = row + dRow;
+        if (
+          newCol >= 0 && newCol < this.grid.length &&
+          newRow >= 0 && newRow < this.grid[newCol].length &&
+          this.grid[newCol][newRow] === true
+        ) {
+          cellsAroundAlive++;
         }
-      }
-      if (row > 0) {
-        if (this.grid[col][row - 1] === true) {
-          cellsAroundAlive++
-        }
-      }
-      if (col < this.grid.length - 1 && row > 0) {
-        if (this.grid[col + 1][row - 1] === true) {
-          cellsAroundAlive++
-        }
-      }
-      if (col > 0) {
-        if (this.grid[col - 1][row] === true) {
-          cellsAroundAlive++
-        }
-      }
-      if (col < this.grid.length - 1) {
-        if (this.grid[col + 1][row] === true) {
-          cellsAroundAlive++
-        }
-      }
-
-      if (row < this.grid[col].length - 1 && col > 0) {
-        if (this.grid[col - 1][row + 1] === true) {
-          cellsAroundAlive++
-        }
-      }
-
-      if (row < this.grid[col].length - 1) {
-        if (this.grid[col][row + 1] === true) {
-          cellsAroundAlive++
-        }
-      }
-      if (row < this.grid[col].length - 1 && col < this.grid.length - 1) {
-        if (this.grid[col + 1][row + 1] === true) {
-          cellsAroundAlive++
-        }
-      }
+      });
       return cellsAroundAlive
     },
     willBeDie(cellsAroundAlive) {
