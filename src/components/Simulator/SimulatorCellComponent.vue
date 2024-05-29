@@ -1,7 +1,7 @@
 <template>
   <div @click="toggleAlive" 
   :class="[
-      isAlive ? 'bg-purple hover:bg-purple/70' : 'bg-dark-purple hover:bg-purple/30',
+      isAlive ? 'bg-purple hover:bg-purple/70' : 'bg-dark-purple hover:bg-purple/40',
       'h-[16px] rounded cursor-pointer'
     ]"
   ></div>

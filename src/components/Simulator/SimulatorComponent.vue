@@ -21,9 +21,9 @@ import SimulatorCell from './SimulatorCellComponent.vue'
     <div class="flex gap-2 items-center">
       <h2>Grille</h2>
       <div class="flex items-center gap-2">
-        <input class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="text"/>
+        <input v-model="tempX" @change="resizeGrid()" class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="number"/>
         <p>X</p>
-        <input class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="text"/>
+        <input v-model="y" @change="resizeGrid()" class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="number"/>
       </div>
     </div>
     <div class="flex gap-2">
@@ -31,7 +31,7 @@ import SimulatorCell from './SimulatorCellComponent.vue'
       <p>{{  nbGeneration }}</p>
     </div>
     <div class="flex gap-2">
-      <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="nextGeneration">Suivante</button>
+      <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="nextGeneration">Suivant</button>
       <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
       <button class="py-3 px-8 bg-pink rounded-2xl hover:bg-pink/70 duration-300" @click="resetSimulation">Reset</button>
     </div>
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       x: 35,
+      tempX : 35,
       y: 15,
       grid: [],
       nextGrid: [],
@@ -64,6 +65,11 @@ export default {
     }
   },
   methods: {
+    resizeGrid(){
+      this.grid = []
+      this.x = this.tempX
+      this.createGrid()
+    },
     toggleSimulation(){
       // Toggle le bouton play & start
       if(this.isRunning){
@@ -167,16 +173,19 @@ export default {
     getCell(colIndex, rowIndex) {
       // Récupération des données pour chaque cellule
       return this.grid[colIndex][rowIndex]
+    },
+    createGrid(){
+      this.grid = this.createArray(this.x, this.y)
+      for (let i = 0; i < this.x; i++) {
+        for (let j = 0; j < this.y; j++) {
+          this.grid[i][j] = false
+        }
+      }
     }
   },
   created() {
     // Appeler createArray pour initialiser grid
-    this.grid = this.createArray(this.x, this.y)
-    for (let i = 0; i < this.x; i++) {
-      for (let j = 0; j < this.y; j++) {
-        this.grid[i][j] = false
-      }
-    }
+    this.createGrid()
   },
   beforeDestroy() {
     // Assurez-vous d'arrêter l'intervalle lorsque le composant est détruit
