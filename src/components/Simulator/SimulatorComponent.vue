@@ -4,7 +4,7 @@ import SimulatorCell from './SimulatorCellComponent.vue'
 <template>
   <div class="grid" 
     :style="gridStyle">
-    <div v-for="(col, colIndex) in grid" :key="colIndex">
+    <div class="grid gap-2" v-for="(col, colIndex) in grid" :key="colIndex">
       <SimulatorCell
         v-bind:col="col"
         v-bind:colIndex="colIndex"
@@ -17,10 +17,26 @@ import SimulatorCell from './SimulatorCellComponent.vue'
       />
     </div>
   </div>
-  <button @click="nextGeneration">Génération Suivante</button>
-  <button @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
-  <button @click="resetSimulation">Reset</button>
-  <p>{{  nbGeneration }}</p>
+  <div class="flex gap-3 bg-dark-blue items-center p-4 border border-purple rounded-2xl">
+    <div class="flex gap-2 items-center">
+      <h2>Grille</h2>
+      <div class="flex items-center gap-2">
+        <input class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="text"/>
+        <p>X</p>
+        <input class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="text"/>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <h2>Génération</h2>
+      <p>{{  nbGeneration }}</p>
+    </div>
+    <div class="flex gap-2">
+      <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="nextGeneration">Suivante</button>
+      <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
+      <button class="py-3 px-8 bg-pink rounded-2xl hover:bg-pink/70 duration-300" @click="resetSimulation">Reset</button>
+    </div>
+  </div>
+  
 </template>
 
 <script>
@@ -30,8 +46,8 @@ export default {
   },
   data() {
     return {
-      x: 10,
-      y: 5,
+      x: 35,
+      y: 15,
       grid: [],
       nextGrid: [],
       intervalId: null,
@@ -43,7 +59,7 @@ export default {
     gridStyle() {
       // Style pour la grille
       return {
-        'grid-template-columns': `repeat(${this.x}, 25px)`
+        'grid-template-columns': `repeat(${this.x}, 16px)`
       };
     }
   },
@@ -172,5 +188,6 @@ export default {
 <style scoped>
 .grid {
   display: grid;
+  gap : 3px
 }
 </style>

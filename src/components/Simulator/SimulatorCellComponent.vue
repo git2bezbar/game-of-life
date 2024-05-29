@@ -1,16 +1,11 @@
 <template>
-  <div @click="toggleAlive" class="cell" :class="{ alive: isAlive }"></div>
+  <div @click="toggleAlive" 
+  :class="[
+      isAlive ? 'bg-purple hover:bg-purple/70' : 'bg-dark-purple hover:bg-purple/30',
+      'h-[16px] rounded cursor-pointer'
+    ]"
+  ></div>
 </template>
-
-<style scoped>
-.cell {
-  height: 25px;
-  border: 1px solid black;
-}
-.alive {
-  background-color: rgb(197, 93, 93);
-}
-</style>
 
 <script>
 export default {
