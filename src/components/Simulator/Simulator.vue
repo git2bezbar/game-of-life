@@ -8,12 +8,12 @@ import SimulatorCell from './SimulatorCell.vue'
       <SimulatorCell
         v-bind:col="col"
         v-bind:colIndex="colIndex"
-        v-for="(cell, cellIndex) in col"
-        :key="cellIndex"
+        v-for="(cell, rowIndex) in col"
+        :key="rowIndex"
         v-bind:cell="cell"
-        v-bind:cellIndex="cellIndex"
-        :isAliveParent="getCell(colIndex, cellIndex)"
-        @update:isAlive="updateCell(cellIndex, colIndex, $event)"
+        v-bind:rowIndex="rowIndex"
+        :isAliveParent="getCell(colIndex, rowIndex)"
+        @update:isAlive="updateCell(colIndex, rowIndex, $event)"
       />
     </div>
   </div>
@@ -40,10 +40,8 @@ export default {
     }
   },
   computed: {
-    count() {
-      return this.x * this.y
-    },
     gridStyle() {
+      // Style pour la grille
       return {
         'grid-template-columns': `repeat(${this.x}, 25px)`
       };
@@ -51,6 +49,7 @@ export default {
   },
   methods: {
     toggleSimulation(){
+      // Toggle le bouton play & start
       if(this.isRunning){
         this.stopSimulation();
       }
@@ -60,11 +59,11 @@ export default {
       this.isRunning = !this.isRunning
     },
     nextGeneration() {
+      // Génére la prochaine génération
       this.nextGrid = JSON.parse(JSON.stringify(this.grid))
       for (let i = 0; i < this.grid.length; i++) {
         for (let j = 0; j < this.grid[i].length; j++) {
           let cellsAroundAlive = 0
-          //console.log(this.grid[i][j])
           cellsAroundAlive = this.countCellsAroundAlive(i, j, cellsAroundAlive)
           if (this.grid[i][j] === false) {
             this.nextGrid[i][j] = this.willBeBorn(cellsAroundAlive)
@@ -77,6 +76,7 @@ export default {
       this.grid = JSON.parse(JSON.stringify(this.nextGrid))
     },
     resetSimulation() {
+      // Met à l'état initial la simulation
       if(this.isRunning){
         this.toggleSimulation()
       }
@@ -88,17 +88,20 @@ export default {
       this.nbGeneration = 0
     },
     startSimulation() {
+      // Débute les génération automatique
       if (this.intervalId === null) {
         this.intervalId = setInterval(this.nextGeneration, 200) // Changez 1000 pour ajuster le délai en millisecondes
       }
     },
     stopSimulation() {
+      // Stop les génération automatique
       if (this.intervalId !== null) {
         clearInterval(this.intervalId)
         this.intervalId = null
       }
     },
     countCellsAroundAlive(col, row, cellsAroundAlive) {
+      // Compteur du nombre de cellule vivante autour de la cellule
       const directions = [
         [-1, -1], [0, -1], [1, -1],
         [-1, 0 ],          [1, 0 ],
@@ -118,6 +121,7 @@ export default {
       return cellsAroundAlive
     },
     willBeDie(cellsAroundAlive) {
+      // Test pour la suppresion de la cellule
       if (cellsAroundAlive < 2 || cellsAroundAlive > 3) {
         return false
       } else {
@@ -125,20 +129,19 @@ export default {
       }
     },
     willBeBorn(cellsAroundAlive) {
-      // Test si nombre de celulle est suffisant
+      // Test si nombre de celulle est suffisant pour naissance d'une nouvelle cellule
       if (cellsAroundAlive === 3) {
         return true
       } else {
         return false
       }
     },
-    updateCell(rowIndex, collIndex, isAlive) {
-      //console.log('row index : ' + rowIndex)
-      //console.log('col index : ' + collIndex)
+    updateCell(collIndex, rowIndex, isAlive) {
       // Mettre à jour l'état de la cellule dans la grille
       this.grid[collIndex][rowIndex] = isAlive
     },
     createArray(cols, rows) {
+      // Création de la grille
       let arr = new Array(cols)
       for (let i = 0; i < arr.length; i++) {
         arr[i] = new Array(rows)
@@ -146,6 +149,7 @@ export default {
       return arr
     },
     getCell(colIndex, rowIndex) {
+      // Récupération des données pour chaque cellule
       return this.grid[colIndex][rowIndex]
     }
   },
