@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RulesView from '../views/RulesView.vue'
 import SimulatorView from '../views/SimulatorView.vue'
+import WikiView from '../views/WikiView.vue'
+import WikiTypeView from '../views/WikiTypeView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +17,12 @@ const router = createRouter({
     {
       path: '/wiki',
       name: 'wiki',
-      component: HomeView
+      component: WikiView
+    },
+    {
+      path: '/wiki/:id',
+      name: 'wikiType',
+      component: WikiTypeView
     },
     {
       path: '/simulator',

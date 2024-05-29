@@ -1,4 +1,5 @@
 <script setup>
+
   import HeaderComponent from '../components/Header/HeaderComponent.vue'
   import FooterComponent from '../components/Footer/FooterComponent.vue'
   import ButtonConmponent from '../components/Button/ButtonComponent.vue'

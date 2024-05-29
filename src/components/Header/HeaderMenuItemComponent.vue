@@ -25,7 +25,7 @@
     name: 'HeaderMenuItemComponent',
     setup() {
       const route = useRoute();
-      const isActive = (path) => route.path === path;
+      const isActive = (path) => route.path.includes(path);
 
       return { isActive };
     },
