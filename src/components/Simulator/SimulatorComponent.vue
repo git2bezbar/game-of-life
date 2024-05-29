@@ -1,5 +1,5 @@
 <script setup>
-import SimulatorCell from './SimulatorCell.vue'
+import SimulatorCell from './SimulatorCellComponent.vue'
 </script>
 <template>
   <div class="grid" 
