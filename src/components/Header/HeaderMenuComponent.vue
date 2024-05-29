@@ -19,14 +19,11 @@ import HeaderMenuItemComponent from './HeaderMenuItemComponent.vue';
     components: {
       HeaderMenuItemComponent,
     },
-    setup() {
-      const headerItems = [
-        { link: '/wiki', title: 'Wiki' },
-        { link: '/simulator', title: 'Simulateur' },
-        { link: '/rules', title: 'Règles' },
-      ];
-
-      return { headerItems };
+    props: {
+      headerItems: {
+        type: Array,
+        required: true,
+      },
     },
   }
 </script>
