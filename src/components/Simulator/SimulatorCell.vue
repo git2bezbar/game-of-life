@@ -27,7 +27,6 @@ export default {
   },
   methods: {
     toggleAlive() {
-      //console.log(this.isAliveParent)
       this.isAlive = !this.isAlive
       this.$emit('update:isAlive', this.isAlive) // Émettre un événement avec la nouvelle valeur de isAlive
     }

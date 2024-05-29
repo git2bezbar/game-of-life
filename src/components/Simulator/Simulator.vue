@@ -4,16 +4,16 @@ import SimulatorCell from './SimulatorCell.vue'
 <template>
   <div class="grid" 
     :style="gridStyle">
-    <div v-for="(row, rowIndex) in grid" :key="rowIndex">
+    <div v-for="(col, colIndex) in grid" :key="colIndex">
       <SimulatorCell
-        v-bind:row="row"
-        v-bind:rowIndex="rowIndex"
-        v-for="(cell, cellIndex) in row"
+        v-bind:col="col"
+        v-bind:colIndex="colIndex"
+        v-for="(cell, cellIndex) in col"
         :key="cellIndex"
         v-bind:cell="cell"
         v-bind:cellIndex="cellIndex"
-        :isAliveParent="getCell(cellIndex, rowIndex)"
-        @update:isAlive="updateCell(cellIndex, rowIndex, $event)"
+        :isAliveParent="getCell(colIndex, cellIndex)"
+        @update:isAlive="updateCell(cellIndex, colIndex, $event)"
       />
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       x: 10,
-      y: 10,
+      y: 5,
       grid: [],
       nextGrid: [],
       intervalId: null,
@@ -136,7 +136,7 @@ export default {
       //console.log('row index : ' + rowIndex)
       //console.log('col index : ' + collIndex)
       // Mettre à jour l'état de la cellule dans la grille
-      this.grid[rowIndex][collIndex] = isAlive
+      this.grid[collIndex][rowIndex] = isAlive
     },
     createArray(cols, rows) {
       let arr = new Array(cols)
@@ -145,9 +145,8 @@ export default {
       }
       return arr
     },
-    getCell(rowIndex, cellIndex) {
-      //console.log('getCell : ', this.grid[rowIndex][cellIndex])
-      return this.grid[rowIndex][cellIndex]
+    getCell(colIndex, rowIndex) {
+      return this.grid[colIndex][rowIndex]
     }
   },
   created() {
