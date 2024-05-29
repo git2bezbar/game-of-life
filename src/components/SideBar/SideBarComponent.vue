@@ -23,8 +23,8 @@
   export default {
     name: 'WikiSideBarComponent',
     data() {
-      const route = useRoute()
-      console.log(route.params.id)
+      const route = useRoute();
+
       return {
         types: [],
         isFetching: false,
