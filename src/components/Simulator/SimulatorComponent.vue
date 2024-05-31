@@ -1,5 +1,6 @@
 <script setup>
 import SimulatorCell from './SimulatorCellComponent.vue'
+import SelectComponent from '@/components/Select/SelectComponent.vue'
 </script>
 <template>
   <div class="grid" 
@@ -13,6 +14,7 @@ import SimulatorCell from './SimulatorCellComponent.vue'
         v-bind:cell="cell"
         v-bind:rowIndex="rowIndex"
         :isAliveParent="getCell(colIndex, rowIndex)"
+        :color="selectedColor"
         @update:isAlive="updateCell(colIndex, rowIndex, $event)"
       />
     </div>
@@ -34,6 +36,16 @@ import SimulatorCell from './SimulatorCellComponent.vue'
       <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="nextGeneration">Suivant</button>
       <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
       <button class="py-3 px-8 bg-pink rounded-2xl hover:bg-pink/70 duration-300" @click="resetSimulation">Reset</button>
+      <!--
+      <select @change="changeColor" class="bg-dark-blue border rounded border-purple px-4 py-2">
+        
+        <option selected value="#8C39FF"><div class="w-2 h-2 bg-purple rounded-xl"></div>Violet</option>
+        <option value="#FF005C">Rose</option>
+        <option value="#52ED39">Vert</option>
+        <option value="#FF380D">Orange</option>
+        <option value="#1271FF">Bleu</option>
+      </select>-->
+      <SelectComponent @changeColor="changeColor" />
     </div>
   </div>
   
@@ -42,7 +54,8 @@ import SimulatorCell from './SimulatorCellComponent.vue'
 <script>
 export default {
   components: {
-    SimulatorCell
+    SimulatorCell,
+    SelectComponent
   },
   data() {
     return {
@@ -53,7 +66,8 @@ export default {
       nextGrid: [],
       intervalId: null,
       isRunning : false,
-      nbGeneration: 0
+      nbGeneration: 0,
+      selectedColor: "#8C39FF"
     }
   },
   computed: {
@@ -65,6 +79,9 @@ export default {
     }
   },
   methods: {
+    changeColor(event){
+      this.selectedColor = event.target.value
+    },
     resizeGrid(){
       this.grid = []
       this.x = this.tempX
