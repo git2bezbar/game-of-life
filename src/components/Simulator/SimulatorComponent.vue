@@ -56,6 +56,7 @@ export default {
       grid: [],
       nextGrid: [],
       intervalId: null,
+      intervalTime : 200,
       isRunning : false,
       nbGeneration: 0,
       selectedColor: "#8C39FF"
@@ -125,7 +126,7 @@ export default {
     startSimulation() {
       // Débute les génération automatique
       if (this.intervalId === null) {
-        this.intervalId = setInterval(this.nextGeneration, 200) // Changez 1000 pour ajuster le délai en millisecondes
+        this.intervalId = setInterval(this.nextGeneration, this.intervalTime) // Changez 1000 pour ajuster le délai en millisecondes
       }
     },
     stopSimulation() {
