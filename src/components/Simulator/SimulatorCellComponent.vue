@@ -1,7 +1,7 @@
 <template>
   <div @click="toggleAlive"
   class='h-[16px] rounded cursor-pointer duraction-200'
-  :style="cellClasses"
+  :style="cellStyle"
   @mouseover="applyHoverStyle"
   @mouseout="removeHoverStyle"
   ></div>
@@ -9,29 +9,33 @@
 
 <script>
 export default {
-  props: ['isAliveParent','color'],
-  data() {
+  props: {
+    isAliveParent : Boolean,
+    color: String
+  },
+  data(props) {
     return {
       isAlive: this.isAliveParent,
+      cellColor: props.color,
       hoverStyle: {}
     }
   },
   computed: {
-    cellClasses() {
+    cellStyle() {
       // const aliveClass = this.isAlive ? `background-color : ${this.color} ; hover:bg-${this.color}/70` : `bg-dark-purple hover:bg-${this.color}/40`;
-      const aliveClass = this.isAlive ? `background-color : ${this.color};` : `background-color : #18132B`;
       return {
-        backgroundColor: this.isAlive ? this.color : `#18132B`,
+        backgroundColor: this.isAlive ? this.cellColor : `#18132B`,
         ...this.hoverStyle,
       };
-    }
+    },
+
   },
   watch: {
     isAliveParent(newValue) {
       this.isAlive = newValue
     },
-    changeColor(){
-      this.color = newColor
+    color(newColor){
+      this.cellColor = newColor;
     }
   },
   methods: {
@@ -41,9 +45,8 @@ export default {
     },
     applyHoverStyle(){
       this.hoverStyle = {
-        backgroundColor: this.isAlive ? `${this.color}` : `${this.color}`
+        backgroundColor: this.isAlive ? `${this.cellColor}` : `${this.cellColor}`
       };
-      console.log(this.hoverStyle)
     },
     removeHoverStyle() {
       this.hoverStyle = {};

@@ -14,7 +14,7 @@ import SelectComponent from '@/components/Select/SelectComponent.vue'
         v-bind:cell="cell"
         v-bind:rowIndex="rowIndex"
         :isAliveParent="getCell(colIndex, rowIndex)"
-        :color="selectedColor"
+        :color="getColor()"
         @update:isAlive="updateCell(colIndex, rowIndex, $event)"
       />
     </div>
@@ -36,15 +36,6 @@ import SelectComponent from '@/components/Select/SelectComponent.vue'
       <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="nextGeneration">Suivant</button>
       <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
       <button class="py-3 px-8 bg-pink rounded-2xl hover:bg-pink/70 duration-300" @click="resetSimulation">Reset</button>
-      <!--
-      <select @change="changeColor" class="bg-dark-blue border rounded border-purple px-4 py-2">
-        
-        <option selected value="#8C39FF"><div class="w-2 h-2 bg-purple rounded-xl"></div>Violet</option>
-        <option value="#FF005C">Rose</option>
-        <option value="#52ED39">Vert</option>
-        <option value="#FF380D">Orange</option>
-        <option value="#1271FF">Bleu</option>
-      </select>-->
       <SelectComponent @changeColor="changeColor" />
     </div>
   </div>
@@ -78,9 +69,14 @@ export default {
       };
     }
   },
+  watch: {
+    selectedColor(newColor){
+      this.selectedColor = newColor
+    }
+  },
   methods: {
-    changeColor(event){
-      this.selectedColor = event.target.value
+    changeColor(color){
+      this.selectedColor = color
     },
     resizeGrid(){
       this.grid = []
@@ -191,6 +187,9 @@ export default {
       // Récupération des données pour chaque cellule
       return this.grid[colIndex][rowIndex]
     },
+    getColor(){
+      return this.selectedColor
+    },
     createGrid(){
       this.grid = this.createArray(this.x, this.y)
       for (let i = 0; i < this.x; i++) {
@@ -204,7 +203,7 @@ export default {
     // Appeler createArray pour initialiser grid
     this.createGrid()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // Assurez-vous d'arrêter l'intervalle lorsque le composant est détruit
     this.stopSimulation()
   }
