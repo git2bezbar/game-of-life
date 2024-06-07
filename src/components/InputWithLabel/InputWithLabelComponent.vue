@@ -6,7 +6,6 @@
       type="text"
       :value="inputValue"
       :placeholder="placeholder"
-      @input="inputHandler"
     />
   </div>
 </template>
@@ -38,11 +37,5 @@
         this.inputValue = newValue
       }
     },
-    methods: {
-      inputHandler(e) {
-        this.inputValue = e.target.value
-        this.$emit('input', this.inputValue)
-      }
-    }
   }
 </script>
