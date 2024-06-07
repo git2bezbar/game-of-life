@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-2 content-stretch h-screen w-screen bg-dark-purple">
     <div class="flex flex-col p-16 gap-4 bg-purple justify-center">
-      <img src="/kreator-logo.svg" alt="Kreator Logo" width="210" height="50" />
+      <img src="@/assets/kreator-logo.svg" alt="Kreator Logo" width="210" height="50" />
       <h1 class="text-7xl">Bienvenue sur Kreator</h1>
       <p>La plateforme d'administration du Wiki de Game of Life.</p>
     </div>
