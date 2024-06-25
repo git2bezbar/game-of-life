@@ -2,14 +2,15 @@
   <header>
     <div class="bg-dark-purple px-16 py-8 flex justify-between items-center">
       <router-link to="/">
-        <img alt="Game of Life logo" class="logo" src="@/assets/game-of-life-logo.svg" width="265" height="50" />
+        <img v-if="type === 'website'" alt="Game of Life logo" class="logo" src="@/assets/game-of-life-logo.svg" width="265" height="50" />
+        <img v-else alt="Kreator logo" class="logo" src="@/assets/kreator-logo.svg" width="265" height="50" />
       </router-link>
       <SearchInputComponent />
       <ButtonComponent class="uppercase" :to="'/login'">
-        Connexion
+        {{ type === 'website' ? 'Connexion' : 'Déconnexion' }}
       </ButtonComponent>
     </div>
-    <HeaderMenuComponent />
+    <HeaderMenuComponent :headerItems="headerItems" />
   </header>
 </template>
 
@@ -24,6 +25,25 @@
       ButtonComponent,
       SearchInputComponent,
       HeaderMenuComponent,
+    },
+    props: {
+      type: {
+        type: String,
+        default: 'website',
+      },
+    },
+    setup(props) {
+      const headerItems = props.type === 'website' ? [
+        { link: '/wiki', title: 'Wiki' },
+        { link: '/simulator', title: 'Simulateur' },
+        { link: '/rules', title: 'Règles' },
+      ] : [
+        { link: '/dashboard/types', title: 'Types' },
+        { link: '/dashboard/config', title: 'Configurations' },
+      ];
+      return {
+        headerItems,
+      }
     },
   }
 </script>
