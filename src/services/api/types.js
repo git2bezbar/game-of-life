@@ -36,7 +36,15 @@ export async function getType(typeId) {
     throw new TypeError('typeId must not be empty');
   }
 
-  const reponse = await fetch(`http://localhost:3000/api/types/${typeId}`);
+  const reponse = await fetch(`http://localhost:3000/api/types/${typeId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
   const type = await reponse.json();
 
   if (!type) {
@@ -74,6 +82,7 @@ export async function createType(newType) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(newType),
+    credentials: 'include',
   });
 
   const type = await reponse.json();
@@ -121,6 +130,7 @@ export async function updateType(typeId, updatedType) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(updatedType),
+    credentials: 'include',
   });
 
   const type = await reponse.json();
@@ -152,6 +162,7 @@ export async function deleteType(typeId) {
 
   const reponse = await fetch(`http://localhost:3000/api/types/${typeId}`, {
     method: 'DELETE',
+    credentials: 'include',
   });
 
   if (reponse.status === 404) {

@@ -7,6 +7,8 @@
   * @param {string | Number} typeId - The id of the type if you want to filter. 
   */
 
+import { getCookie } from "../utils";
+
 export async function getAllConfigs(typeId = -1) {
   const reponse = await fetch(`http://localhost:3000/api/configs${typeId !== -1 ? `?typeId=${typeId}` : ''}`);
   const configs = await reponse.json();
@@ -74,7 +76,8 @@ export async function createConfig(newConfig) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(newConfig)
+    body: JSON.stringify(newConfig),
+    credentials: 'include'
   });
 
   const config = await reponse.json();
@@ -119,9 +122,10 @@ export async function updateConfig(configId, updatedConfig) {
   const reponse = await fetch(`http://localhost:3000/api/configs/${configId}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updatedConfig)
+    body: JSON.stringify(updatedConfig),
+    credentials: 'include'
   });
 
   const config = await reponse.json();
@@ -152,7 +156,8 @@ export async function deleteConfig(configId) {
   }
 
   const reponse = await fetch(`http://localhost:3000/api/configs/${configId}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    credentials: 'include'
   });
 
   if (reponse.status === 404) {

@@ -5,37 +5,27 @@
   * login(req, res);
   * ```
   * 
-  * @param {Object} req - The request object.
-  * @param {Object} res - The response object.
-  * @returns {Object} - The user.
-  * @throws {Error} - If the user is not found.
-  * @throws {TypeError} - If the user is not an object.
+  * 
+  * @param {Object} username - The user's username.
+  * @param {Object} password - The user's password.
   */
 
-export async function login(req, res) {
-  if (typeof req !== 'object') {
-    throw new TypeError('req must be an object');
+export async function login(username, password) {
+  if (!username || !password) {
+    throw new TypeError('username and password are required');
   }
 
-  if (typeof res !== 'object') {
-    throw new TypeError('res must be an object');
-  }
-
-  const response = await fetch('http://localhost:3000/api/auth/login', {
+  await fetch('http://localhost:3000/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(req.body),
+    credentials: 'include',
+    body: JSON.stringify({ username, password }),
+  }).then((res) => res.json()).then((data) => {    
+    // set jwtToken cookie
+    document.cookie = `jwtToken=${data}; path=/; expires=${new Date(Date.now() + 60 * 60 * 1000 * 24 * 7).toUTCString()}`;
   });
-
-  const user = await response.json();
-
-  if (!user) {
-    throw new Error('user not found');
-  }
-
-  return user;
 }
 
 /**
@@ -48,7 +38,7 @@ export async function login(req, res) {
  */
 
 export async function logout() {
-  const logout = await fetch('http://localhost:3000/api/auth/logout', {
+  const logout = await fetch('http://localhost:3000/api/logout', {
     method: 'POST',
   });
 
