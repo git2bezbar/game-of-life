@@ -1,21 +1,20 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full">
     <label class="text-lg" :for="label.toLowerCase()">{{ label }}</label>
-    <input
+    <select
       :id="label.toLowerCase()"
-      class="p-4 bg-purple/10 border border-purple/40 rounded-2xl outline-none focus:border-purple/80 duration-300 placeholder:text-white/40 min-w-[300px] w-full"
-      min="0"
-      step="1"
-      :type="type"
+      class="p-4 bg-purple/10 border border-purple/40 rounded-2xl outline-none focus:border-purple/80 duration-300 placeholder:text-white/40 min-w-[300px] w-full opacity-50 pointer-events-none"
       :value="inputValue"
-      :placeholder="placeholder"
-    />
+    >
+      <option value="" disabled>{{ placeholder }}</option>
+      <slot></slot>
+    </select>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'InputWithLabelComponent',
+    name: 'SelectWithLabelComponent',
     props: {
       value: {
         type: String,
@@ -28,10 +27,6 @@
       placeholder: {
         type: String,
         default: ''
-      },
-      type: {
-        type: String,
-        default: 'text'
       }
     },
     data() {
