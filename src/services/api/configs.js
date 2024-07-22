@@ -7,8 +7,6 @@
   * @param {string | Number} typeId - The id of the type if you want to filter. 
   */
 
-import { getCookie } from "../utils";
-
 export async function getAllConfigs(typeId = -1) {
   const reponse = await fetch(`http://localhost:3000/api/configs${typeId !== -1 ? `?typeId=${typeId}` : ''}`);
   const configs = await reponse.json();
