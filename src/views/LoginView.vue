@@ -12,14 +12,23 @@
         label="Pseudo"
         type="text"
         placeholder="Entrez votre pseudo"
+        :value="username"
+        @input="username = $event.target.value"
       />
       <InputWithLabelComponent
         id="password"
         label="Mot de passe"
         type="password"
         placeholder="Entrez votre mot de passe"
+        :value="password"
+        @input="password = $event.target.value"
       />
-      <ButtonComponent type="primary">Se connecter</ButtonComponent>
+      <ButtonComponent
+        type="primary"
+        @click="loginToDashboard"
+        >
+        Se connecter
+      </ButtonComponent>
     </form>
   </div>
 </template>
@@ -28,11 +37,25 @@
   import InputWithLabelComponent from '@/components/InputWithLabel/InputWithLabelComponent.vue';
   import ButtonComponent from '@/components/Button/ButtonComponent.vue';
 
+  import { login } from '@/services/api/auth';
+
   export default {
     name: 'LoginView',
     components: {
       InputWithLabelComponent,
       ButtonComponent,
+    },
+    data() {
+      return {
+        username: '',
+        password: '',
+      };
+    },
+    methods: {
+      async loginToDashboard() {
+        await login(this.username, this.password);
+        this.$router.push('/dashboard');
+      },
     },
   }
 </script>
