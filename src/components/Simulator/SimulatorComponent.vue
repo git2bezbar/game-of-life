@@ -1,10 +1,11 @@
 <script setup>
 import SimulatorCell from './SimulatorCellComponent.vue'
+import SelectComponent from '@/components/Select/SelectComponent.vue'
 </script>
 <template>
   <div class="grid" 
     :style="gridStyle">
-    <div v-for="(col, colIndex) in grid" :key="colIndex">
+    <div class="grid gap-2" v-for="(col, colIndex) in grid" :key="colIndex">
       <SimulatorCell
         v-bind:col="col"
         v-bind:colIndex="colIndex"
@@ -13,41 +14,76 @@ import SimulatorCell from './SimulatorCellComponent.vue'
         v-bind:cell="cell"
         v-bind:rowIndex="rowIndex"
         :isAliveParent="getCell(colIndex, rowIndex)"
+        :color="getColor()"
         @update:isAlive="updateCell(colIndex, rowIndex, $event)"
       />
     </div>
   </div>
-  <button @click="nextGeneration">Génération Suivante</button>
-  <button @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
-  <button @click="resetSimulation">Reset</button>
-  <p>{{  nbGeneration }}</p>
+  <div class="flex gap-3 bg-dark-blue items-center p-4 border border-purple rounded-2xl">
+    <div class="flex gap-2 items-center">
+      <h2>Grille</h2>
+      <div class="flex items-center gap-2">
+        <input v-model="tempX" @change="resizeGrid()" class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="number"/>
+        <p>X</p>
+        <input v-model="y" @change="resizeGrid()" class="w-12 h-12 border border-purple/40 rounded-lg bg-purple/10" type="number"/>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <h2>Génération</h2>
+      <p>{{  nbGeneration }}</p>
+    </div>
+    <div class="flex gap-2">
+      <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="nextGeneration">Suivant</button>
+      <button class="py-3 px-8 bg-purple rounded-2xl hover:bg-purple/70 duration-300" @click="toggleSimulation">{{ isRunning ? 'Stop' : 'Play' }}</button>
+      <button class="py-3 px-8 bg-pink rounded-2xl hover:bg-pink/70 duration-300" @click="resetSimulation">Reset</button>
+      <SelectComponent @changeColor="changeColor" />
+    </div>
+  </div>
+  
 </template>
 
 <script>
 export default {
   components: {
-    SimulatorCell
+    SimulatorCell,
+    SelectComponent
   },
   data() {
     return {
-      x: 10,
-      y: 5,
+      x: 35,
+      tempX : 35,
+      y: 15,
       grid: [],
       nextGrid: [],
       intervalId: null,
+      intervalTime : 200,
       isRunning : false,
-      nbGeneration: 0
+      nbGeneration: 0,
+      selectedColor: "#8C39FF"
     }
   },
   computed: {
     gridStyle() {
       // Style pour la grille
       return {
-        'grid-template-columns': `repeat(${this.x}, 25px)`
+        'grid-template-columns': `repeat(${this.x}, 16px)`
       };
     }
   },
+  watch: {
+    selectedColor(newColor){
+      this.selectedColor = newColor
+    }
+  },
   methods: {
+    changeColor(color){
+      this.selectedColor = color
+    },
+    resizeGrid(){
+      this.grid = []
+      this.x = this.tempX
+      this.createGrid()
+    },
     toggleSimulation(){
       // Toggle le bouton play & start
       if(this.isRunning){
@@ -90,7 +126,7 @@ export default {
     startSimulation() {
       // Débute les génération automatique
       if (this.intervalId === null) {
-        this.intervalId = setInterval(this.nextGeneration, 200) // Changez 1000 pour ajuster le délai en millisecondes
+        this.intervalId = setInterval(this.nextGeneration, this.intervalTime) // Changez 1000 pour ajuster le délai en millisecondes
       }
     },
     stopSimulation() {
@@ -151,18 +187,24 @@ export default {
     getCell(colIndex, rowIndex) {
       // Récupération des données pour chaque cellule
       return this.grid[colIndex][rowIndex]
+    },
+    getColor(){
+      return this.selectedColor
+    },
+    createGrid(){
+      this.grid = this.createArray(this.x, this.y)
+      for (let i = 0; i < this.x; i++) {
+        for (let j = 0; j < this.y; j++) {
+          this.grid[i][j] = false
+        }
+      }
     }
   },
   created() {
     // Appeler createArray pour initialiser grid
-    this.grid = this.createArray(this.x, this.y)
-    for (let i = 0; i < this.x; i++) {
-      for (let j = 0; j < this.y; j++) {
-        this.grid[i][j] = false
-      }
-    }
+    this.createGrid()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // Assurez-vous d'arrêter l'intervalle lorsque le composant est détruit
     this.stopSimulation()
   }
@@ -172,5 +214,6 @@ export default {
 <style scoped>
 .grid {
   display: grid;
+  gap : 3px
 }
 </style>
