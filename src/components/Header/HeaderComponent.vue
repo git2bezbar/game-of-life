@@ -6,7 +6,10 @@
         <img v-else alt="Kreator logo" class="logo" src="@/assets/kreator-logo.svg" width="265" height="50" />
       </router-link>
       <SearchInputComponent />
-      <ButtonComponent class="uppercase" :to="'/login'">
+      <ButtonComponent
+        class="uppercase"
+        @click="handleClick"
+        >
         {{ type === 'website' ? 'Connexion' : 'Déconnexion' }}
       </ButtonComponent>
     </div>
@@ -32,6 +35,24 @@
         default: 'website',
       },
     },
+    methods: {
+      handleClick() {
+        if (this.type === 'website') {
+          this.$router.push('/login');
+        } else {
+          this.logout();
+        }
+      },
+      logout() {
+        document.cookie.split(';').forEach(cookie => {
+          const eqPos = cookie.indexOf('=');
+          const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+          console.log
+          document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+        });
+        this.$router.push('/login');
+      },
+    },
     setup(props) {
       const headerItems = props.type === 'website' ? [
         { link: '/wiki', title: 'Wiki' },
@@ -39,7 +60,7 @@
         { link: '/rules', title: 'Règles' },
       ] : [
         { link: '/dashboard/types', title: 'Types' },
-        { link: '/dashboard/config', title: 'Configurations' },
+        { link: '/dashboard/configurations', title: 'Configurations' },
       ];
       return {
         headerItems,
